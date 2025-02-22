@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Marry Me?</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sky {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom, #020111, #191621);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .star, .moon {
+            background-color: white;
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .star {
+            width: 2vw;
+            height: 2vw;
+            min-width: 6px;
+            min-height: 6px;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+
+        .moon {
+            width: 15vw;
+            height: 15vw;
+            min-width: 50px;
+            min-height: 50px;
+            background-color: #f0e68c;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            top: 10%;
+            left: 70%;
+        }
+
+        .star:nth-child(1) { top: 20%; left: 25%; }
+        .star:nth-child(2) { top: 30%; left: 60%; }
+        .star:nth-child(3) { top: 50%; left: 40%; }
+        .star:nth-child(4) { top: 70%; left: 80%; }
+        .star:nth-child(5) { top: 85%; left: 50%; }
+        .star:nth-child(6) { top: 45%; left: 20%; }
+        .star:nth-child(7) { top: 35%; left: 70%; }
+        .star:nth-child(8) { top: 10%; left: 40%; }
+        .star:nth-child(9) { top: 60%; left: 30%; }
+        .star:nth-child(10) { top: 75%; left: 10%; }
+        .star:nth-child(11) { top: 55%; left: 85%; }
+        .star:nth-child(12) { top: 25%; left: 10%; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes shooting {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50vw, 50vh) scale(0.5);
+            }
+        }
+
+        .shooting-star {
+            width: 1.5vw;
+            height: 1.5vw;
+            min-width: 4px;
+            min-height: 4px;
+            background-color: white;
+            position: absolute;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white;
+            display: none;
+        }
+
+        .message-box {
+            display: none;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            width: 80%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .heart {
+            color: #ff69b4;
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            margin-top: 10px;
+        }
+
+        /* Media Queries for Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .moon {
+                width: 20vw;
+                height: 20vw;
+                top: 5%;
+                left: 65%;
+            }
+
+            .star {
+                width: 2.5vw;
+                height: 2.5vw;
+            }
+
+            .shooting-star {
+                width: 2vw;
+                height: 2vw;
+            }
+
+            .message-box {
+                padding: 10px;
+                font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .moon {
+                width: 25vw;
+                height: 25vw;
+                top: 5%;
+                left: 60%;
+            }
+
+            .star {
+                width: 3vw;
+                height: 3vw;
+            }
+
+            .message-box {
+                width: 90%;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sky">
+            <div class="star" onclick="shootingStar(this, 0)"></div>
+            <div class="star" onclick="shootingStar(this, 1)"></div>
+            <div class="star" onclick="shootingStar(this, 2)"></div>
+            <div class="star" onclick="shootingStar(this, 3)"></div>
+            <div class="star" onclick="shootingStar(this, 4)"></div>
+            <div class="star" onclick="shootingStar(this, 5)"></div>
+            <div class="star" onclick="shootingStar(this, 6)"></div>
+            <div class="star" onclick="shootingStar(this, 7)"></div>
+            <div class="star" onclick="shootingStar(this, 8)"></div>
+            <div class="star" onclick="shootingStar(this, 9)"></div>
+            <div class="star" onclick="shootingStar(this, 10)"></div>
+            <div class="star" onclick="shootingStar(this, 11)"></div>
+            <div id="message" class="message-box"></div>
+            <div class="moon" onclick="triggerContinuousShootingStars()"></div>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            "You light up my life, just like these stars.",
+            "Every moment with you is like a dream come true.",
+            "I can't imagine my life without you.",
+            "You are my universe.",
+            "You make my darkest nights bright.",
+            "With you, every day is a new adventure.",
+            "You complete me in every way.",
+            "Your love is like a guiding star.",
+            "You are the one I’ve been waiting for.",
+            "Every day with you is a blessing.",
+            "You make my heart skip a beat.",
+            "My life is better with you in it.",
+            "I LOVE YOU SO MUCH MY PERSONAL MOON (yk, background mai stars tut rahe hai mtlb wish puri hogii, too please meri wish puriii krdo apki smile se joo ik yee dekh kr aa jayegi and thodi sii aur wish hai i want a tight wala hug😭, and kiss bhee pls itna sab bnaya hai return gift smjh kr hee dedo😭😭)"
+        ];
+
+        function shootingStar(starElement, index) {
+            const shootingStar = document.createElement('div');
+            shootingStar.className = 'shooting-star';
+            shootingStar.style.top = starElement.style.top;
+            shootingStar.style.left = starElement.style.left;
+
+            document.querySelector('.sky').appendChild(shootingStar);
+
+            shootingStar.style.display = 'block';
+            shootingStar.style.animation = 'shooting 2s forwards';
+
+            starElement.style.display = 'none';
+
+            if (index === 12) {
+                document.getElementById('message').innerHTML = messages[index] + '<br><span class="heart">❤️</span>';
+                document.getElementById('message').classList.add('show');
+            } else {
+                document.getElementById('message').innerHTML = messages[index];
+                document.getElementById('message').classList.add('show');
+            }
+
+            setTimeout(() => {
+                shootingStar.remove();
+            }, 2000);
+        }
+
+        function triggerContinuousShootingStars() {
+            document.getElementById('message').innerHTML = messages[12] + '<br><span class="heart">❤️</span>';
+            document.getElementById('message').classList.add('show');
+
+            let shootingInterval = setInterval(() => {
+                const shootingStar = document.createElement('div');
+                shootingStar.className = 'shooting-star';
+                shootingStar.style.top = `${Math.random() * 80 + 10}%`;
+                shootingStar.style.left = `${Math.random() * 80 + 10}%`;
+
+                document.querySelector('.sky').appendChild(shootingStar);
+
+                shootingStar.style.display = 'block';
+                shootingStar.style.animation = 'shooting 2s forwards';
+
+                setTimeout(() => {
+                    shootingStar.remove();
+                }, 2000);
+            }, 300);
+
+            setTimeout(() => {
+                clearInterval(shootingInterval);
+            }, 15000);
+        }
+    </script>
+</body>
+</html>
